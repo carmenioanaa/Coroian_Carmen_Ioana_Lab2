@@ -6,4 +6,5 @@ public class Coroian_Carmen_Ioana_Lab2Context(DbContextOptions<Coroian_Carmen_Io
 
     // Add DbSet for Publisher so _context.Publisher is available in pages
     public DbSet<Coroian_Carmen_Ioana_Lab2.Models.Publisher> Publisher { get; set; } = default!;
+    public DbSet<Coroian_Carmen_Ioana_Lab2.Models.Author> Author { get; set; } = default!;
 }

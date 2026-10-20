@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Coroian_Carmen_Ioana_Lab2.Migrations
 {
     [DbContext(typeof(Coroian_Carmen_Ioana_Lab2Context))]
-    [Migration("20261018132540_Publisher")]
-    partial class Publisher
+    [Migration("20261020111210_AddAuthor")]
+    partial class AddAuthor
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,27 @@ namespace Coroian_Carmen_Ioana_Lab2.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Coroian_Carmen_Ioana_Lab2.Models.Author", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Author");
+                });
+
             modelBuilder.Entity("Coroian_Carmen_Ioana_Lab2.Models.Book", b =>
                 {
                     b.Property<int>("ID")
@@ -32,9 +53,8 @@ namespace Coroian_Carmen_Ioana_Lab2.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<string>("Author")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("AuthorID")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(6, 2)");
@@ -50,6 +70,8 @@ namespace Coroian_Carmen_Ioana_Lab2.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("AuthorID");
 
                     b.HasIndex("PublisherID");
 
@@ -75,11 +97,22 @@ namespace Coroian_Carmen_Ioana_Lab2.Migrations
 
             modelBuilder.Entity("Coroian_Carmen_Ioana_Lab2.Models.Book", b =>
                 {
+                    b.HasOne("Coroian_Carmen_Ioana_Lab2.Models.Author", "Author")
+                        .WithMany("Books")
+                        .HasForeignKey("AuthorID");
+
                     b.HasOne("Coroian_Carmen_Ioana_Lab2.Models.Publisher", "Publisher")
                         .WithMany("Books")
                         .HasForeignKey("PublisherID");
 
+                    b.Navigation("Author");
+
                     b.Navigation("Publisher");
+                });
+
+            modelBuilder.Entity("Coroian_Carmen_Ioana_Lab2.Models.Author", b =>
+                {
+                    b.Navigation("Books");
                 });
 
             modelBuilder.Entity("Coroian_Carmen_Ioana_Lab2.Models.Publisher", b =>

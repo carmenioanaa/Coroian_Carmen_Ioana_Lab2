@@ -5,7 +5,7 @@
 namespace Coroian_Carmen_Ioana_Lab2.Migrations
 {
     /// <inheritdoc />
-    public partial class Publisher : Migration
+    public partial class AddPublisher : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
