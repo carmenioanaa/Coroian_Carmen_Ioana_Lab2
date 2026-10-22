@@ -19,23 +19,23 @@ public class DeleteModel : PageModel
 
     public async Task<IActionResult> OnGetAsync(int? id)
     {
-        if (id is null)
+        if (id == null)
         {
             return NotFound();
         }
 
-        var book = await _context.Book.Include(b => b.Publisher)
+        Book = await _context.Book
+            .Include(b => b.Publisher)
             .Include(b => b.Author)
+            .Include(b => b.BookCategories)
+            .ThenInclude(b => b.Category)
+            .AsNoTracking()
             .FirstOrDefaultAsync(m => m.ID == id);
-        if (book is null)
+
+        if (Book == null)
         {
             return NotFound();
         }
-        else
-        {
-            Book = book;
-        }
-
         return Page();
     }
 

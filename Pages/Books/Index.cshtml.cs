@@ -21,6 +21,9 @@ public class IndexModel : PageModel
         Book = await _context.Book
             .Include(b => b.Publisher)
             .Include(b => b.Author)
+            .Include(b => b.BookCategories)
+            .ThenInclude(b => b.Category)
+            .AsNoTracking()
             .ToListAsync();
     }    
 }
