@@ -1,8 +1,19 @@
 using Microsoft.EntityFrameworkCore;
+using Coroian_Carmen_Ioana_Lab2.Data;
+using Microsoft.AspNetCore.Identity;
+
 var builder = WebApplication.CreateBuilder(args);
+
 var connectionString = builder.Configuration.GetConnectionString("Coroian_Carmen_Ioana_Lab2Context") ?? throw new InvalidOperationException("Connection string 'Coroian_Carmen_Ioana_Lab2Context' not found.");
 
 builder.Services.AddDbContext<Coroian_Carmen_Ioana_Lab2Context>(options => options.UseSqlServer(connectionString));
+
+
+builder.Services.AddDbContext<LibraryIdentityContext>(options => options.UseSqlServer(connectionString));
+
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<LibraryIdentityContext>();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
@@ -18,13 +29,9 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseRouting();
-
 app.UseAuthorization();
-
 app.MapStaticAssets();
-app.MapRazorPages()
-   .WithStaticAssets();
+app.MapRazorPages().WithStaticAssets();
 
 app.Run();
