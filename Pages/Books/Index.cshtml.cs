@@ -1,11 +1,12 @@
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using Coroian_Carmen_Ioana_Lab2.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Coroian_Carmen_Ioana_Lab2.Models.ViewModels;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using Coroian_Carmen_Ioana_Lab2.Data;
+using Coroian_Carmen_Ioana_Lab2.Models;
 
 namespace Coroian_Carmen_Ioana_Lab2.Pages.Books
 {
@@ -18,9 +19,6 @@ namespace Coroian_Carmen_Ioana_Lab2.Pages.Books
             _context = context;
         }
 
-        public IList<Book> Book { get; set; } = default!;
-
-        // Adăugările din Lab 3 și Lab 4 pentru date relaționate și sortare
         public BookData BookD { get; set; }
         public int BookID { get; set; }
         public int CategoryID { get; set; }
@@ -47,33 +45,14 @@ namespace Coroian_Carmen_Ioana_Lab2.Pages.Books
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                BookD.Books = BookD.Books.Where(s => s.Author.FirstName.Contains(searchString)
-                                       || s.Author.LastName.Contains(searchString)
-                                       || s.Title.Contains(searchString));
+                BookD.Books = BookD.Books.Where(s => s.Title.Contains(searchString));
             }
 
             if (id != null)
             {
                 BookID = id.Value;
-                Book book = BookD.Books
-                    .Where(i => i.ID == id.Value).Single();
+                Book book = BookD.Books.Where(i => i.ID == id.Value).Single();
                 BookD.Categories = book.BookCategories.Select(s => s.Category);
-            }
-
-            switch (sortOrder)
-            {
-                case "title_desc":
-                    BookD.Books = BookD.Books.OrderByDescending(s => s.Title);
-                    break;
-                case "author_desc":
-                    BookD.Books = BookD.Books.OrderByDescending(s => s.Author.FullName);
-                    break;
-                case "author":
-                    BookD.Books = BookD.Books.OrderBy(s => s.Author.FullName);
-                    break;
-                default:
-                    BookD.Books = BookD.Books.OrderBy(s => s.Title);
-                    break;
             }
         }
     }

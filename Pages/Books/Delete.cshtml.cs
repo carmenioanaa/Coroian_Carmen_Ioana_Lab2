@@ -1,10 +1,12 @@
+using Coroian_Carmen_Ioana_Lab2.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Coroian_Carmen_Ioana_Lab2.Models;
 
 namespace Coroian_Carmen_Ioana_Lab2.Pages.Books;
 
+[Authorize(Roles = "Admin")]
 public class DeleteModel : PageModel
 {
     private readonly Coroian_Carmen_Ioana_Lab2Context _context;
